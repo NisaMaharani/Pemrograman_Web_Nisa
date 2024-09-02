@@ -35,9 +35,41 @@
                                 <td><a href="mailto:{{ $profile->email }}">{{ $profile->email }}</a></td>
                             </tr>
                             <tr>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
                                 <td>Foro Profil</td>
                                 <td>:</td>
-                                <td><img src="image/nisaa.jpeg" alt="nisa" width="150"  height="200"></td>
+                                <td>
+                                    <center>
+                                        @foreach($profiles as $dg)
+                                        @if(!empty($dg->foto))
+                                        <!-- Tampilkan Hanya Tombol Hapus Jika Foto Ada -->
+                                        <center><img id="gambar-preview{{ $dg->id }}" width="150" height="200" class="preview-image" src="{{ url('image/'.$dg->foto) }}" alt="Preview Gambar"></center>
+                                        <br />
+                                        <form action="{{ route('profile.destroy', $dg->id) }}" method="post">
+                                            @csrf
+                                            @method('DELETE')
+                                            <input type="hidden" name="id" value="{{ $dg->id }}">
+                                            <button type="submit" class="btn btn-danger">Hapus</button>
+                                        </form>
+                                        @else
+                                        <!-- Tampilkan Input File dan Tombol Update Jika Foto Tidak Ada -->
+                                        <form class="form-horizontal" action="{{ route('profile.update', $dg->id) }}" method="post" enctype="multipart/form-data">
+                                            @csrf
+                                            @method('PUT')
+                                            <div class="form-group">
+                                                <input type="hidden" name="id" value="{{ $dg->id }}">
+                                                <center><img id="gambar-preview{{ $dg->id }}" width="150" height="200" class="preview-image" src="#" alt="Preview Gambar" style="display: none;"></center>
+                                                <input type="file" class="form-control h-100" id="foto" name="foto" onchange="previewImage(this, 'gambar-preview{{ $dg->id }}')" accept="image/jpeg, image/png" style="margin-bottom: 30px;">
+                                            </div>
+                                            <button class="btn-primary" type="submit">Tambah</button>
+                                        </form>
+                                        @endif
+                                        @endforeach
+                                    </center>
+                                </td>
+
                             </tr>
                         </table>
                     </div>
@@ -46,6 +78,23 @@
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script>
+    // Function untuk menampilkan preview gambar
+    function previewImage(input, imgId) {
+        const preview = document.getElementById(imgId);
+        const file = input.files[0];
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            preview.src = e.target.result;
+            preview.style.display = 'block';
+        }
+
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+    }
+    </script>
   </body>
 </html>
 @endsection
