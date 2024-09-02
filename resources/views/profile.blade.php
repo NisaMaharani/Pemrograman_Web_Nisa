@@ -37,7 +37,7 @@
                             <tr>
                                 <td>Foro Profil</td>
                                 <td>:</td>
-                                <td><img src="image/nisa.jpeg" alt="nisa" width="150"  height="200"></td>
+                                <td><img src="image/nisaa.jpeg" alt="nisa" width="150"  height="200"></td>
                             </tr>
                         </table>
                     </div>
